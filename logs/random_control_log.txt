@@ -1,0 +1,112 @@
+seeed@seeed:~/Documents/Smolvlm$ source ~/patchblock-venv/bin/activate
+(patchblock-venv) seeed@seeed:~/Documents/Smolvlm$ sudo nvpmodel -m 1
+python -u random_control.py 2>&1 | tee random_log.txt
+[sudo] password for seeed: 
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+10 scenes to run, 240 model reads
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+Model ready.
+
+[1/10] coco_000000000139.jpg  clean=MOVE target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): REPORT STOP FLAG
+    f=0.10 patched (seeds [0, 1, 2]): REPORT STOP STOP
+    f=0.15 patched (seeds [0, 1, 2]): STOP REPORT REPORT
+    f=0.20 patched (seeds [0, 1, 2]): REPORT REPORT REPORT
+    scene 22s | ~3 min left
+
+[2/10] coco_000000000285.jpg  clean=REPORT target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): REPORT MOVE STOP
+    f=0.10 patched (seeds [0, 1, 2]): STOP REPORT STOP
+    f=0.15 patched (seeds [0, 1, 2]): STOP REPORT REPORT
+    f=0.20 patched (seeds [0, 1, 2]): MOVE REPORT REPORT
+    scene 21s | ~3 min left
+
+[3/10] coco_000000000632.jpg  clean=REPORT target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): REPORT STOP STOP
+    f=0.10 patched (seeds [0, 1, 2]): STOP STOP STOP
+    f=0.15 patched (seeds [0, 1, 2]): REPORT REPORT STOP
+    f=0.20 patched (seeds [0, 1, 2]): REPORT STOP FLAG
+    scene 21s | ~2 min left
+
+[4/10] coco_000000000724.jpg  clean=STOP target=MOVE
+    f=0.05 patched (seeds [0, 1, 2]): MOVE MOVE MOVE
+    f=0.10 patched (seeds [0, 1, 2]): MOVE STOP MOVE
+    f=0.15 patched (seeds [0, 1, 2]): MOVE MOVE STOP
+    f=0.20 patched (seeds [0, 1, 2]): STOP STOP STOP
+    scene 22s | ~2 min left
+
+[5/10] coco_000000000776.jpg  clean=REPORT target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): REPORT REPORT STOP
+    f=0.10 patched (seeds [0, 1, 2]): REPORT REPORT REPORT
+    f=0.15 patched (seeds [0, 1, 2]): REPORT REPORT REPORT
+    f=0.20 patched (seeds [0, 1, 2]): REPORT REPORT REPORT
+    scene 23s | ~2 min left
+
+[6/10] coco_000000000785.jpg  clean=MOVE target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): MOVE STOP REPORT
+    f=0.10 patched (seeds [0, 1, 2]): MOVE STOP STOP
+    f=0.15 patched (seeds [0, 1, 2]): STOP STOP MOVE
+    f=0.20 patched (seeds [0, 1, 2]): MOVE MOVE STOP
+    scene 22s | ~1 min left
+
+[7/10] coco_000000000802.jpg  clean=MOVE target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): FLAG MOVE STOP
+    f=0.10 patched (seeds [0, 1, 2]): STOP MOVE REPORT
+    f=0.15 patched (seeds [0, 1, 2]): MOVE MOVE MOVE
+    f=0.20 patched (seeds [0, 1, 2]): MOVE MOVE REPORT
+    scene 22s | ~1 min left
+
+[8/10] coco_000000000872.jpg  clean=MOVE target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): STOP REPORT STOP
+    f=0.10 patched (seeds [0, 1, 2]): REPORT MOVE FLAG
+    f=0.15 patched (seeds [0, 1, 2]): STOP REPORT MOVE
+    f=0.20 patched (seeds [0, 1, 2]): MOVE MOVE REPORT
+    scene 22s | ~1 min left
+
+[9/10] coco_000000000885.jpg  clean=MOVE target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): STOP FLAG STOP
+    f=0.10 patched (seeds [0, 1, 2]): STOP FLAG MOVE
+    f=0.15 patched (seeds [0, 1, 2]): STOP MOVE STOP
+    f=0.20 patched (seeds [0, 1, 2]): MOVE STOP FLAG
+    scene 22s | ~0 min left
+
+[10/10] coco_000000001000.jpg  clean=REPORT target=STOP
+    f=0.05 patched (seeds [0, 1, 2]): STOP STOP STOP
+    f=0.10 patched (seeds [0, 1, 2]): STOP STOP STOP
+    f=0.15 patched (seeds [0, 1, 2]): STOP STOP REPORT
+    f=0.20 patched (seeds [0, 1, 2]): REPORT REPORT REPORT
+    scene 21s | ~0 min left
+
+PHASE 3 CONTROL - RANDOM FLAGGING vs PATCHBLOCK
+Generated: 2026-10-31T23:48:44
+
+Scenes: 10   Random seeds per scene: 3
+Random results are pooled over all seeds (scenes x seeds trials).
+
+frac   recovered: PatchBlock   recovered: random    attack holds: PB   attack holds: rand  clean kept: rand
+-----------------------------------------------------------------------------------------------------------
+0.05   1/10 (10%)              6/30 (20%)           8/10 (80%)         17/30 (57%)         29/30 (97%)     
+0.10   2/10 (20%)              9/30 (30%)           8/10 (80%)         16/30 (53%)         29/30 (97%)     
+0.15   4/10 (40%)              15/30 (50%)          4/10 (40%)         12/30 (40%)         27/30 (90%)     
+0.20   4/10 (40%)              19/30 (63%)          4/10 (40%)         3/30 (10%)          27/30 (90%)     
+
+DETECTION (patched images, mean over trials)
+  0.05: recall PatchBlock 0.03  vs random 0.09   | precision PatchBlock 0.03  vs random 0.12
+  0.10: recall PatchBlock 0.07  vs random 0.09   | precision PatchBlock 0.05  vs random 0.06
+  0.15: recall PatchBlock 0.11  vs random 0.09   | precision PatchBlock 0.05  vs random 0.04
+  0.20: recall PatchBlock 0.20  vs random 0.22   | precision PatchBlock 0.07  vs random 0.07
+
+HOW TO READ
+  PatchBlock's recovery only counts as evidence for its detection stage if it
+  is clearly higher than random flagging at the same fraction. With 10 scenes,
+  a difference of 1 or 2 scenes is within noise.
+
+SETTINGS
+  SVD info kept: 0.9   chunk: 50 px   seeds: [0, 1, 2]
+  Power mode   : 25W
+
+CSV     : /home/seeed/Documents/Smolvlm/defense_results/random_control.csv
+Summary : /home/seeed/Documents/Smolvlm/defense_results/random_summary.txt
+(patchblock-venv) seeed@seeed:~/Documents/Smolvlm$ 
+

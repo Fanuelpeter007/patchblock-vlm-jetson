@@ -1,0 +1,748 @@
+seeed@seeed:~/Documents/Smolvlm$ cd ~/Documents/Smolvlm
+bash run_sweep.sh 2 "2 1 0" 3 "1 2 0" 2>&1 | tee sweep_log_runs23.txt
+[sudo] password for seeed: 
+=================== run 2, nvpmodel -m 2 ===================
+NV Power Mode: MAXN_SUPER
+2
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Migrated energy_results/energy.csv: existing 12 rows labelled run 1
+Run 2, power mode MAXN_SUPER. To measure: ['idle', 'clean_nodef', 'attacked_nodef', 'attacked_pb15']
+10 scenes loaded
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+GPU clock source: /sys/class/devfreq/17000000.gpu/cur_freq
+Idle: 20 s, model loaded, nothing running ...
+    idle 5.97 W
+
+GPU warm-up: 30 s of inference ...
+clean_nodef: >= 60 s ...
+    91 decisions, 14.93 W, 9.937 J/decision, median 0.67 s, actions ok 91/91
+
+attacked_nodef: >= 60 s ...
+    104 decisions, 15.70 W, 9.112 J/decision, median 0.57 s, actions ok 104/104
+
+attacked_pb15: >= 60 s ...
+    45 decisions, 10.93 W, 14.812 J/decision, median 1.37 s, actions ok 45/45
+
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:24:01
+Runs: [1, 2]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.96 (n=1)
+    clean_nodef           : 10.177 (n=1)
+    attacked_nodef        : 9.311 (n=1)
+    attacked_pb15         : 15.618 (n=1)
+    defense overhead      : 6.307 (n=1) J  =  67.7 (n=1) %
+  25W
+    idle power (W)        : 5.96 (n=1)
+    clean_nodef           : 10.037 (n=1)
+    attacked_nodef        : 9.130 (n=1)
+    attacked_pb15         : 15.741 (n=1)
+    defense overhead      : 6.611 (n=1) J  =  72.4 (n=1) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=2)
+    clean_nodef           : 9.889 +/- 0.067 (n=2)
+    attacked_nodef        : 9.067 +/- 0.064 (n=2)
+    attacked_pb15         : 14.779 +/- 0.047 (n=2)
+    defense overhead      : 5.712 +/- 0.018 (n=2) J  =  63.0 +/- 0.6 (n=2) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 (n=1)
+    attacked_nodef        : 0.79 (n=1)
+    attacked_pb15         : 1.70 (n=1)
+    defense overhead      : 0.90 (n=1) s
+    PatchBlock CPU step   : 0.78 (n=1) s
+  25W
+    clean_nodef           : 0.76 (n=1)
+    attacked_nodef        : 0.65 (n=1)
+    attacked_pb15         : 1.66 (n=1)
+    defense overhead      : 1.01 (n=1) s
+    PatchBlock CPU step   : 0.84 (n=1) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=2)
+    attacked_nodef        : 0.56 +/- 0.01 (n=2)
+    attacked_pb15         : 1.36 +/- 0.01 (n=2)
+    defense overhead      : 0.80 +/- 0.00 (n=2) s
+    PatchBlock CPU step   : 0.66 +/- 0.00 (n=2) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+CSV     : /home/seeed/Documents/Smolvlm/energy_results/energy.csv
+Summary : /home/seeed/Documents/Smolvlm/energy_results/energy_summary.txt
+=================== run 2, nvpmodel -m 1 ===================
+NV Power Mode: 25W
+1
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Run 2, power mode 25W. To measure: ['idle', 'clean_nodef', 'attacked_nodef', 'attacked_pb15']
+10 scenes loaded
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+GPU clock source: /sys/class/devfreq/17000000.gpu/cur_freq
+Idle: 20 s, model loaded, nothing running ...
+    idle 5.99 W
+
+GPU warm-up: 30 s of inference ...
+clean_nodef: >= 60 s ...
+    78 decisions, 13.06 W, 10.169 J/decision, median 0.78 s, actions ok 78/78
+
+attacked_nodef: >= 60 s ...
+    90 decisions, 13.77 W, 9.202 J/decision, median 0.66 s, actions ok 90/90
+
+attacked_pb15: >= 60 s ...
+    37 decisions, 9.60 W, 15.832 J/decision, median 1.68 s, actions ok 37/37
+
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:28:57
+Runs: [1, 2]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.96 (n=1)
+    clean_nodef           : 10.177 (n=1)
+    attacked_nodef        : 9.311 (n=1)
+    attacked_pb15         : 15.618 (n=1)
+    defense overhead      : 6.307 (n=1) J  =  67.7 (n=1) %
+  25W
+    idle power (W)        : 5.98 +/- 0.02 (n=2)
+    clean_nodef           : 10.103 +/- 0.093 (n=2)
+    attacked_nodef        : 9.166 +/- 0.051 (n=2)
+    attacked_pb15         : 15.787 +/- 0.064 (n=2)
+    defense overhead      : 6.620 +/- 0.013 (n=2) J  =  72.2 +/- 0.3 (n=2) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=2)
+    clean_nodef           : 9.889 +/- 0.067 (n=2)
+    attacked_nodef        : 9.067 +/- 0.064 (n=2)
+    attacked_pb15         : 14.779 +/- 0.047 (n=2)
+    defense overhead      : 5.712 +/- 0.018 (n=2) J  =  63.0 +/- 0.6 (n=2) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 (n=1)
+    attacked_nodef        : 0.79 (n=1)
+    attacked_pb15         : 1.70 (n=1)
+    defense overhead      : 0.90 (n=1) s
+    PatchBlock CPU step   : 0.78 (n=1) s
+  25W
+    clean_nodef           : 0.77 +/- 0.01 (n=2)
+    attacked_nodef        : 0.65 +/- 0.01 (n=2)
+    attacked_pb15         : 1.67 +/- 0.02 (n=2)
+    defense overhead      : 1.02 +/- 0.01 (n=2) s
+    PatchBlock CPU step   : 0.84 +/- 0.00 (n=2) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=2)
+    attacked_nodef        : 0.56 +/- 0.01 (n=2)
+    attacked_pb15         : 1.36 +/- 0.01 (n=2)
+    defense overhead      : 0.80 +/- 0.00 (n=2) s
+    PatchBlock CPU step   : 0.66 +/- 0.00 (n=2) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    25W         clean_nodef     78        78/78       867/612           51.8   0   
+2    25W         attacked_nodef  90        90/90       897/714           53.2   0   
+2    25W         attacked_pb15   37        37/37       557/306           52.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+CSV     : /home/seeed/Documents/Smolvlm/energy_results/energy.csv
+Summary : /home/seeed/Documents/Smolvlm/energy_results/energy_summary.txt
+=================== run 2, nvpmodel -m 0 ===================
+NV Power Mode: 15W
+0
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Run 2, power mode 15W. To measure: ['idle', 'clean_nodef', 'attacked_nodef', 'attacked_pb15']
+10 scenes loaded
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+GPU clock source: /sys/class/devfreq/17000000.gpu/cur_freq
+Idle: 20 s, model loaded, nothing running ...
+    idle 6.00 W
+
+GPU warm-up: 30 s of inference ...
+clean_nodef: >= 60 s ...
+    67 decisions, 11.36 W, 10.202 J/decision, median 0.90 s, actions ok 67/67
+
+attacked_nodef: >= 60 s ...
+    75 decisions, 11.59 W, 9.324 J/decision, median 0.80 s, actions ok 75/75
+
+attacked_pb15: >= 60 s ...
+    37 decisions, 9.32 W, 15.440 J/decision, median 1.67 s, actions ok 37/37
+
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:33:51
+Runs: [1, 2]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.98 +/- 0.02 (n=2)
+    clean_nodef           : 10.189 +/- 0.018 (n=2)
+    attacked_nodef        : 9.317 +/- 0.009 (n=2)
+    attacked_pb15         : 15.529 +/- 0.126 (n=2)
+    defense overhead      : 6.212 +/- 0.135 (n=2) J  =  66.7 +/- 1.5 (n=2) %
+  25W
+    idle power (W)        : 5.98 +/- 0.02 (n=2)
+    clean_nodef           : 10.103 +/- 0.093 (n=2)
+    attacked_nodef        : 9.166 +/- 0.051 (n=2)
+    attacked_pb15         : 15.787 +/- 0.064 (n=2)
+    defense overhead      : 6.620 +/- 0.013 (n=2) J  =  72.2 +/- 0.3 (n=2) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=2)
+    clean_nodef           : 9.889 +/- 0.067 (n=2)
+    attacked_nodef        : 9.067 +/- 0.064 (n=2)
+    attacked_pb15         : 14.779 +/- 0.047 (n=2)
+    defense overhead      : 5.712 +/- 0.018 (n=2) J  =  63.0 +/- 0.6 (n=2) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 +/- 0.00 (n=2)
+    attacked_nodef        : 0.80 +/- 0.00 (n=2)
+    attacked_pb15         : 1.68 +/- 0.02 (n=2)
+    defense overhead      : 0.89 +/- 0.02 (n=2) s
+    PatchBlock CPU step   : 0.76 +/- 0.02 (n=2) s
+  25W
+    clean_nodef           : 0.77 +/- 0.01 (n=2)
+    attacked_nodef        : 0.65 +/- 0.01 (n=2)
+    attacked_pb15         : 1.67 +/- 0.02 (n=2)
+    defense overhead      : 1.02 +/- 0.01 (n=2) s
+    PatchBlock CPU step   : 0.84 +/- 0.00 (n=2) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=2)
+    attacked_nodef        : 0.56 +/- 0.01 (n=2)
+    attacked_pb15         : 1.36 +/- 0.01 (n=2)
+    defense overhead      : 0.80 +/- 0.00 (n=2) s
+    PatchBlock CPU step   : 0.66 +/- 0.00 (n=2) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    15W         clean_nodef     67        67/67       612/612           49.6   0   
+2    15W         attacked_nodef  75        75/75       612/612           49.8   0   
+2    15W         attacked_pb15   37        37/37       491/306           49.2   0   
+2    25W         clean_nodef     78        78/78       867/612           51.8   0   
+2    25W         attacked_nodef  90        90/90       897/714           53.2   0   
+2    25W         attacked_pb15   37        37/37       557/306           52.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+CSV     : /home/seeed/Documents/Smolvlm/energy_results/energy.csv
+Summary : /home/seeed/Documents/Smolvlm/energy_results/energy_summary.txt
+=================== run 3, nvpmodel -m 1 ===================
+NV Power Mode: 25W
+1
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Run 3, power mode 25W. To measure: ['idle', 'clean_nodef', 'attacked_nodef', 'attacked_pb15']
+10 scenes loaded
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+GPU clock source: /sys/class/devfreq/17000000.gpu/cur_freq
+Idle: 20 s, model loaded, nothing running ...
+    idle 5.97 W
+
+GPU warm-up: 30 s of inference ...
+clean_nodef: >= 60 s ...
+    79 decisions, 13.13 W, 10.095 J/decision, median 0.77 s, actions ok 79/79
+
+attacked_nodef: >= 60 s ...
+    92 decisions, 13.89 W, 9.166 J/decision, median 0.65 s, actions ok 92/92
+
+attacked_pb15: >= 60 s ...
+    37 decisions, 9.61 W, 15.715 J/decision, median 1.65 s, actions ok 37/37
+
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:38:45
+Runs: [1, 2, 3]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.98 +/- 0.02 (n=2)
+    clean_nodef           : 10.189 +/- 0.018 (n=2)
+    attacked_nodef        : 9.317 +/- 0.009 (n=2)
+    attacked_pb15         : 15.529 +/- 0.126 (n=2)
+    defense overhead      : 6.212 +/- 0.135 (n=2) J  =  66.7 +/- 1.5 (n=2) %
+  25W
+    idle power (W)        : 5.98 +/- 0.02 (n=3)
+    clean_nodef           : 10.100 +/- 0.066 (n=3)
+    attacked_nodef        : 9.166 +/- 0.036 (n=3)
+    attacked_pb15         : 15.763 +/- 0.061 (n=3)
+    defense overhead      : 6.597 +/- 0.042 (n=3) J  =  72.0 +/- 0.5 (n=3) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=2)
+    clean_nodef           : 9.889 +/- 0.067 (n=2)
+    attacked_nodef        : 9.067 +/- 0.064 (n=2)
+    attacked_pb15         : 14.779 +/- 0.047 (n=2)
+    defense overhead      : 5.712 +/- 0.018 (n=2) J  =  63.0 +/- 0.6 (n=2) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 +/- 0.00 (n=2)
+    attacked_nodef        : 0.80 +/- 0.00 (n=2)
+    attacked_pb15         : 1.68 +/- 0.02 (n=2)
+    defense overhead      : 0.89 +/- 0.02 (n=2) s
+    PatchBlock CPU step   : 0.76 +/- 0.02 (n=2) s
+  25W
+    clean_nodef           : 0.77 +/- 0.01 (n=3)
+    attacked_nodef        : 0.65 +/- 0.01 (n=3)
+    attacked_pb15         : 1.66 +/- 0.01 (n=3)
+    defense overhead      : 1.01 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.84 +/- 0.00 (n=3) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=2)
+    attacked_nodef        : 0.56 +/- 0.01 (n=2)
+    attacked_pb15         : 1.36 +/- 0.01 (n=2)
+    defense overhead      : 0.80 +/- 0.00 (n=2) s
+    PatchBlock CPU step   : 0.66 +/- 0.00 (n=2) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    15W         clean_nodef     67        67/67       612/612           49.6   0   
+2    15W         attacked_nodef  75        75/75       612/612           49.8   0   
+2    15W         attacked_pb15   37        37/37       491/306           49.2   0   
+2    25W         clean_nodef     78        78/78       867/612           51.8   0   
+2    25W         attacked_nodef  90        90/90       897/714           53.2   0   
+2    25W         attacked_pb15   37        37/37       557/306           52.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+3    25W         clean_nodef     79        79/79       871/714           51.6   0   
+3    25W         attacked_nodef  92        92/92       900/714           53.0   0   
+3    25W         attacked_pb15   37        37/37       559/306           51.7   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+CSV     : /home/seeed/Documents/Smolvlm/energy_results/energy.csv
+Summary : /home/seeed/Documents/Smolvlm/energy_results/energy_summary.txt
+=================== run 3, nvpmodel -m 2 ===================
+NV Power Mode: MAXN_SUPER
+2
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Run 3, power mode MAXN_SUPER. To measure: ['idle', 'clean_nodef', 'attacked_nodef', 'attacked_pb15']
+10 scenes loaded
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+GPU clock source: /sys/class/devfreq/17000000.gpu/cur_freq
+Idle: 20 s, model loaded, nothing running ...
+    idle 5.99 W
+
+GPU warm-up: 30 s of inference ...
+clean_nodef: >= 60 s ...
+    92 decisions, 15.03 W, 9.889 J/decision, median 0.66 s, actions ok 92/92
+
+attacked_nodef: >= 60 s ...
+    105 decisions, 15.82 W, 9.050 J/decision, median 0.56 s, actions ok 105/105
+
+attacked_pb15: >= 60 s ...
+    45 decisions, 10.99 W, 14.708 J/decision, median 1.35 s, actions ok 45/45
+
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:43:36
+Runs: [1, 2, 3]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.98 +/- 0.02 (n=2)
+    clean_nodef           : 10.189 +/- 0.018 (n=2)
+    attacked_nodef        : 9.317 +/- 0.009 (n=2)
+    attacked_pb15         : 15.529 +/- 0.126 (n=2)
+    defense overhead      : 6.212 +/- 0.135 (n=2) J  =  66.7 +/- 1.5 (n=2) %
+  25W
+    idle power (W)        : 5.98 +/- 0.02 (n=3)
+    clean_nodef           : 10.100 +/- 0.066 (n=3)
+    attacked_nodef        : 9.166 +/- 0.036 (n=3)
+    attacked_pb15         : 15.763 +/- 0.061 (n=3)
+    defense overhead      : 6.597 +/- 0.042 (n=3) J  =  72.0 +/- 0.5 (n=3) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=3)
+    clean_nodef           : 9.889 +/- 0.048 (n=3)
+    attacked_nodef        : 9.061 +/- 0.046 (n=3)
+    attacked_pb15         : 14.755 +/- 0.053 (n=3)
+    defense overhead      : 5.694 +/- 0.034 (n=3) J  =  62.8 +/- 0.5 (n=3) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 +/- 0.00 (n=2)
+    attacked_nodef        : 0.80 +/- 0.00 (n=2)
+    attacked_pb15         : 1.68 +/- 0.02 (n=2)
+    defense overhead      : 0.89 +/- 0.02 (n=2) s
+    PatchBlock CPU step   : 0.76 +/- 0.02 (n=2) s
+  25W
+    clean_nodef           : 0.77 +/- 0.01 (n=3)
+    attacked_nodef        : 0.65 +/- 0.01 (n=3)
+    attacked_pb15         : 1.66 +/- 0.01 (n=3)
+    defense overhead      : 1.01 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.84 +/- 0.00 (n=3) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=3)
+    attacked_nodef        : 0.56 +/- 0.01 (n=3)
+    attacked_pb15         : 1.36 +/- 0.01 (n=3)
+    defense overhead      : 0.80 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.65 +/- 0.00 (n=3) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    15W         clean_nodef     67        67/67       612/612           49.6   0   
+2    15W         attacked_nodef  75        75/75       612/612           49.8   0   
+2    15W         attacked_pb15   37        37/37       491/306           49.2   0   
+2    25W         clean_nodef     78        78/78       867/612           51.8   0   
+2    25W         attacked_nodef  90        90/90       897/714           53.2   0   
+2    25W         attacked_pb15   37        37/37       557/306           52.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+3    25W         clean_nodef     79        79/79       871/714           51.6   0   
+3    25W         attacked_nodef  92        92/92       900/714           53.0   0   
+3    25W         attacked_pb15   37        37/37       559/306           51.7   0   
+3    MAXN_SUPER  clean_nodef     92        92/92       989/816           54.0   1   
+3    MAXN_SUPER  attacked_nodef  105       105/105     1009/816          55.6   0   
+3    MAXN_SUPER  attacked_pb15   45        45/45       657/306           54.2   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+  - run 3 MAXN_SUPER clean_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+CSV     : /home/seeed/Documents/Smolvlm/energy_results/energy.csv
+Summary : /home/seeed/Documents/Smolvlm/energy_results/energy_summary.txt
+=================== run 3, nvpmodel -m 0 ===================
+NV Power Mode: 15W
+0
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Run 3, power mode 15W. To measure: ['idle', 'clean_nodef', 'attacked_nodef', 'attacked_pb15']
+10 scenes loaded
+Loading HuggingFaceTB/SmolVLM-500M-Instruct (float32) ...
+GPU clock source: /sys/class/devfreq/17000000.gpu/cur_freq
+Idle: 20 s, model loaded, nothing running ...
+    idle 5.99 W
+
+GPU warm-up: 30 s of inference ...
+clean_nodef: >= 60 s ...
+    67 decisions, 11.34 W, 10.209 J/decision, median 0.90 s, actions ok 67/67
+
+attacked_nodef: >= 60 s ...
+    75 decisions, 11.58 W, 9.321 J/decision, median 0.80 s, actions ok 75/75
+
+attacked_pb15: >= 60 s ...
+    36 decisions, 9.29 W, 15.578 J/decision, median 1.69 s, actions ok 36/36
+
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:48:28
+Runs: [1, 2, 3]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.98 +/- 0.02 (n=3)
+    clean_nodef           : 10.196 +/- 0.017 (n=3)
+    attacked_nodef        : 9.319 +/- 0.007 (n=3)
+    attacked_pb15         : 15.545 +/- 0.093 (n=3)
+    defense overhead      : 6.227 +/- 0.099 (n=3) J  =  66.8 +/- 1.1 (n=3) %
+  25W
+    idle power (W)        : 5.98 +/- 0.02 (n=3)
+    clean_nodef           : 10.100 +/- 0.066 (n=3)
+    attacked_nodef        : 9.166 +/- 0.036 (n=3)
+    attacked_pb15         : 15.763 +/- 0.061 (n=3)
+    defense overhead      : 6.597 +/- 0.042 (n=3) J  =  72.0 +/- 0.5 (n=3) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=3)
+    clean_nodef           : 9.889 +/- 0.048 (n=3)
+    attacked_nodef        : 9.061 +/- 0.046 (n=3)
+    attacked_pb15         : 14.755 +/- 0.053 (n=3)
+    defense overhead      : 5.694 +/- 0.034 (n=3) J  =  62.8 +/- 0.5 (n=3) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 +/- 0.00 (n=3)
+    attacked_nodef        : 0.80 +/- 0.00 (n=3)
+    attacked_pb15         : 1.69 +/- 0.01 (n=3)
+    defense overhead      : 0.89 +/- 0.02 (n=3) s
+    PatchBlock CPU step   : 0.77 +/- 0.01 (n=3) s
+  25W
+    clean_nodef           : 0.77 +/- 0.01 (n=3)
+    attacked_nodef        : 0.65 +/- 0.01 (n=3)
+    attacked_pb15         : 1.66 +/- 0.01 (n=3)
+    defense overhead      : 1.01 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.84 +/- 0.00 (n=3) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=3)
+    attacked_nodef        : 0.56 +/- 0.01 (n=3)
+    attacked_pb15         : 1.36 +/- 0.01 (n=3)
+    defense overhead      : 0.80 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.65 +/- 0.00 (n=3) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    15W         clean_nodef     67        67/67       612/612           49.6   0   
+2    15W         attacked_nodef  75        75/75       612/612           49.8   0   
+2    15W         attacked_pb15   37        37/37       491/306           49.2   0   
+2    25W         clean_nodef     78        78/78       867/612           51.8   0   
+2    25W         attacked_nodef  90        90/90       897/714           53.2   0   
+2    25W         attacked_pb15   37        37/37       557/306           52.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+3    15W         clean_nodef     67        67/67       612/612           49.5   0   
+3    15W         attacked_nodef  75        75/75       612/612           50.2   0   
+3    15W         attacked_pb15   36        36/36       489/306           49.8   0   
+3    25W         clean_nodef     79        79/79       871/714           51.6   0   
+3    25W         attacked_nodef  92        92/92       900/714           53.0   0   
+3    25W         attacked_pb15   37        37/37       559/306           51.7   0   
+3    MAXN_SUPER  clean_nodef     92        92/92       989/816           54.0   1   
+3    MAXN_SUPER  attacked_nodef  105       105/105     1009/816          55.6   0   
+3    MAXN_SUPER  attacked_pb15   45        45/45       657/306           54.2   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+  - run 3 MAXN_SUPER clean_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+CSV     : /home/seeed/Documents/Smolvlm/energy_results/energy.csv
+Summary : /home/seeed/Documents/Smolvlm/energy_results/energy_summary.txt
+/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+PHASE 4 - ENERGY PER DECISION ACROSS POWER MODES
+Generated: 2026-11-01T01:48:32
+Runs: [1, 2, 3]. Values are mean +/- sample SD across runs.
+
+ENERGY PER DECISION (J), total module input power (VDD_IN)
+
+  15W
+    idle power (W)        : 5.98 +/- 0.02 (n=3)
+    clean_nodef           : 10.196 +/- 0.017 (n=3)
+    attacked_nodef        : 9.319 +/- 0.007 (n=3)
+    attacked_pb15         : 15.545 +/- 0.093 (n=3)
+    defense overhead      : 6.227 +/- 0.099 (n=3) J  =  66.8 +/- 1.1 (n=3) %
+  25W
+    idle power (W)        : 5.98 +/- 0.02 (n=3)
+    clean_nodef           : 10.100 +/- 0.066 (n=3)
+    attacked_nodef        : 9.166 +/- 0.036 (n=3)
+    attacked_pb15         : 15.763 +/- 0.061 (n=3)
+    defense overhead      : 6.597 +/- 0.042 (n=3) J  =  72.0 +/- 0.5 (n=3) %
+  MAXN_SUPER
+    idle power (W)        : 5.98 +/- 0.01 (n=3)
+    clean_nodef           : 9.889 +/- 0.048 (n=3)
+    attacked_nodef        : 9.061 +/- 0.046 (n=3)
+    attacked_pb15         : 14.755 +/- 0.053 (n=3)
+    defense overhead      : 5.694 +/- 0.034 (n=3) J  =  62.8 +/- 0.5 (n=3) %
+
+LATENCY PER DECISION, median within each run (s)
+
+  15W
+    clean_nodef           : 0.90 +/- 0.00 (n=3)
+    attacked_nodef        : 0.80 +/- 0.00 (n=3)
+    attacked_pb15         : 1.69 +/- 0.01 (n=3)
+    defense overhead      : 0.89 +/- 0.02 (n=3) s
+    PatchBlock CPU step   : 0.77 +/- 0.01 (n=3) s
+  25W
+    clean_nodef           : 0.77 +/- 0.01 (n=3)
+    attacked_nodef        : 0.65 +/- 0.01 (n=3)
+    attacked_pb15         : 1.66 +/- 0.01 (n=3)
+    defense overhead      : 1.01 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.84 +/- 0.00 (n=3) s
+  MAXN_SUPER
+    clean_nodef           : 0.66 +/- 0.01 (n=3)
+    attacked_nodef        : 0.56 +/- 0.01 (n=3)
+    attacked_pb15         : 1.36 +/- 0.01 (n=3)
+    defense overhead      : 0.80 +/- 0.01 (n=3) s
+    PatchBlock CPU step   : 0.65 +/- 0.00 (n=3) s
+
+VALIDITY CHECKS (every row)
+
+run  mode        condition       decisions actions ok  GPU MHz mean/min  max C  OC  
+------------------------------------------------------------------------------------
+1    15W         clean_nodef     67        67/67       ?/?               48.6   0   
+1    15W         attacked_nodef  75        75/75       ?/?               49.6   0   
+1    15W         attacked_pb15   36        36/36       ?/?               48.8   0   
+1    25W         clean_nodef     79        79/79       ?/?               51.7   0   
+1    25W         attacked_nodef  92        92/92       ?/?               53.2   0   
+1    25W         attacked_pb15   37        37/37       ?/?               52.1   0   
+1    MAXN_SUPER  clean_nodef     93        93/93       ?/?               54.9   2   
+1    MAXN_SUPER  attacked_nodef  106       106/106     ?/?               56.6   1   
+1    MAXN_SUPER  attacked_pb15   45        45/45       ?/?               55.1   0   
+2    15W         clean_nodef     67        67/67       612/612           49.6   0   
+2    15W         attacked_nodef  75        75/75       612/612           49.8   0   
+2    15W         attacked_pb15   37        37/37       491/306           49.2   0   
+2    25W         clean_nodef     78        78/78       867/612           51.8   0   
+2    25W         attacked_nodef  90        90/90       897/714           53.2   0   
+2    25W         attacked_pb15   37        37/37       557/306           52.1   0   
+2    MAXN_SUPER  clean_nodef     91        91/91       981/816           53.7   0   
+2    MAXN_SUPER  attacked_nodef  104       104/104     1006/816          55.4   0   
+2    MAXN_SUPER  attacked_pb15   45        45/45       654/306           54.1   0   
+3    15W         clean_nodef     67        67/67       612/612           49.5   0   
+3    15W         attacked_nodef  75        75/75       612/612           50.2   0   
+3    15W         attacked_pb15   36        36/36       489/306           49.8   0   
+3    25W         clean_nodef     79        79/79       871/714           51.6   0   
+3    25W         attacked_nodef  92        92/92       900/714           53.0   0   
+3    25W         attacked_pb15   37        37/37       559/306           51.7   0   
+3    MAXN_SUPER  clean_nodef     92        92/92       989/816           54.0   1   
+3    MAXN_SUPER  attacked_nodef  105       105/105     1009/816          55.6   0   
+3    MAXN_SUPER  attacked_pb15   45        45/45       657/306           54.2   0   
+
+PROBLEMS: 
+  - run 1 MAXN_SUPER clean_nodef: over-current events 2
+  - run 1 MAXN_SUPER attacked_nodef: over-current events 1
+  - run 3 MAXN_SUPER clean_nodef: over-current events 1
+
+NOTES
+  - float32 inference; PatchBlock runs on the CPU before GPU inference (not pipelined).
+  - Defense overhead = attacked_pb15 minus attacked_nodef, computed per run, then averaged.
+  - clean vs attacked differ partly because the answers differ in length
+    ('REPORT.' vs 'STOP.'), not only because of the attack.
+  - Over-current (OC) events or a falling GPU MHz minimum mean throttling;
+    treat that mode's numbers with caution.
+  - Run 1 has no GPU clock (tegrastats without sudo).
+
+Done. Board set back to 25W (mode 1).
+seeed@seeed:~/Documents/Smolvlm$ 
+
